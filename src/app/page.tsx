@@ -7,8 +7,8 @@ import { Star, ChevronDown, ChevronUp, Play, User, Zap, Sun, Sparkles, Map, Brai
 
 export default function HomePage() {
     const [isOuraConnected, setIsOuraConnected] = useState(false)
-    const [chatUrl, setChatUrl] = useState('')
     const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+    const [chatLoaded, setChatLoaded] = useState(false)
 
     useEffect(() => {
         // Check if Oura is already connected
@@ -24,24 +24,41 @@ export default function HomePage() {
             // Hide success message after 5 seconds
             setTimeout(() => setShowSuccessMessage(false), 5000)
         }
-
-        // Generate chat URL based on current domain
-        const currentHost = window.location.host
-        let chatDomain = ''
-
-        if (currentHost.includes('localhost')) {
-            // For local development, assume chat runs on different port
-            chatDomain = 'http://localhost:3001'
-        } else if (currentHost.includes('vercel.app')) {
-            // For Vercel preview deployments
-            chatDomain = `https://chat-${currentHost}`
-        } else {
-            // For custom domains
-            chatDomain = `https://chat.${currentHost}`
-        }
-
-        setChatUrl(`${chatDomain}/?id=${process.env.NEXT_PUBLIC_STENO_CHAT_ID || 'devin-ai-SxIFG3'}`)
     }, [])
+
+    const openChat = () => {
+        if (!chatLoaded) {
+            // Create and inject the Steno embed script
+            const script = document.createElement('script')
+            script.src = 'https://cdn.jsdelivr.net/gh/aisteno/embed@latest/steno-chat.js'
+
+            const chatId = process.env.NEXT_PUBLIC_STENO_CHAT_ID || 'devin-ai-SxIFG3'
+            script.setAttribute('data-id', chatId)
+            script.setAttribute('data-position', 'right')
+            script.setAttribute('data-mode', 'fullscreen')
+
+            // Add backend=dev for local/non-Vercel environments
+            const isProduction = process.env.VERCEL_ENV === 'production' || window.location.hostname.includes('vercel.app')
+            if (!isProduction) {
+                script.setAttribute('data-backend', 'dev')
+            }
+
+            // The embed script automatically:
+            // 1. Reads cookies from your domain (including oura_access_token)
+            // 2. Creates an iframe with chat.steno.ai
+            // 3. Passes the cookies to the iframe via postMessage
+            // 4. The chat can then access the Oura token
+
+            document.body.appendChild(script)
+            setChatLoaded(true)
+        } else {
+            // If already loaded, trigger the chat to open
+            // The embed script adds a global function to toggle the chat
+            if ((window as any).StenoChat && (window as any).StenoChat.open) {
+                (window as any).StenoChat.open()
+            }
+        }
+    }
 
     return (
         <main className="font-sans">
@@ -58,17 +75,17 @@ export default function HomePage() {
                     🎉 Successfully connected to Oura! Your health data is now available for personalized AI coaching.
                 </div>
             )}
-            <HeroBanner isOuraConnected={isOuraConnected} chatUrl={chatUrl} />
+            <HeroBanner isOuraConnected={isOuraConnected} openChat={openChat} />
             <OuraIntegrationSection />
             <BenefitsSection />
             <HowItWorksSection />
             <TestimonialsSection />
-            <CTASection isOuraConnected={isOuraConnected} chatUrl={chatUrl} />
+            <CTASection isOuraConnected={isOuraConnected} openChat={openChat} />
         </main>
     )
 }
 
-function HeroBanner({ isOuraConnected, chatUrl }: { isOuraConnected: boolean; chatUrl: string }) {
+function HeroBanner({ isOuraConnected, openChat }: { isOuraConnected: boolean; openChat: () => void }) {
     return (
         <section className="bg-black text-white font-[400]">
             <div className="relative flex flex-col-reverse md:flex-row items-end h-[600px] md:h-[780px] bg-gradient-to-br from-purple-900 via-black to-blue-900 overflow-hidden p-6 md:p-16">
@@ -93,18 +110,16 @@ function HeroBanner({ isOuraConnected, chatUrl }: { isOuraConnected: boolean; ch
                                     Connect Your Oura Ring
                                 </Link>
                                 <button
-                                    onClick={() => chatUrl && (window.location.href = chatUrl)}
+                                    onClick={openChat}
                                     className="border border-white hover:bg-white hover:text-black text-white px-8 py-3 rounded-lg font-medium transition-colors"
-                                    disabled={!chatUrl}
                                 >
                                     Try Without Oura Data
                                 </button>
                             </>
                         ) : (
                             <button
-                                onClick={() => chatUrl && (window.location.href = chatUrl)}
+                                onClick={openChat}
                                 className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium transition-colors"
-                                disabled={!chatUrl}
                             >
                                 Open Your Personalized AI Coach
                             </button>
@@ -324,7 +339,7 @@ function TestimonialsSection() {
     )
 }
 
-function CTASection({ isOuraConnected, chatUrl }: { isOuraConnected: boolean; chatUrl: string }) {
+function CTASection({ isOuraConnected, openChat }: { isOuraConnected: boolean; openChat: () => void }) {
     return (
         <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-24 md:py-32">
             <div className="w-full max-w-[1230px] mx-auto px-4 text-center">
@@ -347,18 +362,16 @@ function CTASection({ isOuraConnected, chatUrl }: { isOuraConnected: boolean; ch
                                 Connect Your Oura Ring
                             </Link>
                             <button
-                                onClick={() => chatUrl && (window.location.href = chatUrl)}
+                                onClick={openChat}
                                 className="border-2 border-white hover:bg-white hover:text-blue-600 text-white px-8 py-4 rounded-lg font-medium text-lg transition-colors"
-                                disabled={!chatUrl}
                             >
                                 Try Without Oura Data
                             </button>
                         </>
                     ) : (
                         <button
-                            onClick={() => chatUrl && (window.location.href = chatUrl)}
+                            onClick={openChat}
                             className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-medium text-lg transition-colors"
-                            disabled={!chatUrl}
                         >
                             Open Your AI Health Coach
                         </button>
