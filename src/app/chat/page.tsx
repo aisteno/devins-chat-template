@@ -15,7 +15,7 @@ export default function ChatPage() {
     return (
         <div className="fixed inset-0 w-full h-full">
             <iframe
-                src="https://devinchat.steno.ai/?id=devin-ai-SxIFG3&mode=fullscreen"
+                src="https://chat.steno.ai/?id=devin-ai-SxIFG3&mode=fullscreen"
                 className="w-full h-full border-0"
                 allow="microphone; camera"
                 title="Steno Chat"
