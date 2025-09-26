@@ -66,19 +66,23 @@ export async function GET(request: NextRequest) {
     // Create response with redirect back to the correct base URL
     const response = NextResponse.redirect(new URL('/?connected=true', baseUrl))
 
-    // Set cookies - for ngrok, don't set domain so it uses the current domain
-    const cookieOptions = {
+    // Set cookies with domain for subdomain sharing
+    const cookieOptions: any = {
       path: '/',
       maxAge: 60 * 60 * 24 * 7, // 7 days
-      httpOnly: false, // Allow client-side access for the embed script
-      secure: true, // Always use secure for ngrok
+      httpOnly: false, // Allow client-side access
+      secure: true, // Always use secure
       sameSite: 'lax' as const
     }
 
-    // For production, set domain for subdomain sharing
-    if (process.env.VERCEL_URL && !process.env.NGROK_URL) {
+    // Set domain to .steno.ai for subdomain cookie sharing
+    // This allows devin.steno.ai and devinchat.steno.ai to share cookies
+    if (baseUrl.includes('steno.ai')) {
+      cookieOptions.domain = '.steno.ai'
+    } else if (process.env.VERCEL_URL && !process.env.NGROK_URL) {
+      // For other Vercel deployments
       const domain = `.${process.env.VERCEL_URL.split('.').slice(-2).join('.')}`
-      Object.assign(cookieOptions, { domain })
+      cookieOptions.domain = domain
     }
 
     console.log('Setting cookie with options:', cookieOptions)
