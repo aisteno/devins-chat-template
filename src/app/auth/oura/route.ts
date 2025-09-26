@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 function getBaseUrl(request: NextRequest) {
+  // Use the actual host from the request headers (works with custom domains)
+  const host = request.headers.get('host')
+  const protocol = process.env.NODE_ENV === 'production' || host?.includes('steno.ai') ? 'https' : 'http'
+
+  if (host) {
+    return `${protocol}://${host}`
+  }
+
+  // Fallback to environment variables
   return process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : process.env.NGROK_URL || request.nextUrl.origin
