@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       client_id: process.env.OURA_CLIENT_ID!,
       redirect_uri: redirectUri,
       response_type: 'code',
-      scope: 'daily heartrate personal'
+      scope: 'daily heartrate personal tag session workout spo2 sleep'
     })
 
     const authUrl = `https://cloud.ouraring.com/oauth/authorize?${authParams.toString()}`
