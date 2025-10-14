@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Activity } from "lucide-react"
+import { Activity, ChevronDown } from "lucide-react"
 
 export default function HomePage() {
     const [isOuraConnected, setIsOuraConnected] = useState(false)
     const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+    const [showChatDropdown, setShowChatDropdown] = useState(false)
 
     useEffect(() => {
         // Check if Oura is already connected
@@ -62,12 +63,32 @@ export default function HomePage() {
                             <p className="text-gray-200 mb-8">
                                 Your health data is synced and ready for personalized AI coaching
                             </p>
-                            <Link
-                                href="/chat"
-                                className="block w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105"
-                            >
-                                Open AI Health Coach
-                            </Link>
+                            <div className="relative">
+                                <Link
+                                    href="/chat"
+                                    className="block w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105"
+                                >
+                                    Open AI Health Coach
+                                </Link>
+                                <button
+                                    onClick={() => setShowChatDropdown(!showChatDropdown)}
+                                    className="mt-2 text-sm text-gray-300 hover:text-white transition-colors flex items-center mx-auto"
+                                >
+                                    More options <ChevronDown className="w-4 h-4 ml-1" />
+                                </button>
+                                {showChatDropdown && (
+                                    <div className="absolute left-0 right-0 mt-1 bg-gray-800 rounded shadow-lg border border-gray-700 overflow-hidden z-10">
+                                        <a
+                                            href="https://chat.steno.ai/?id=devin-ai-SxIFG3&mode=fullscreen"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block w-full text-left px-4 py-3 text-sm hover:bg-gray-700 transition-colors text-gray-300"
+                                        >
+                                            Open Old Chat (Login Required)
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     ) : (
                         <div className="space-y-6">
@@ -103,18 +124,38 @@ export default function HomePage() {
                                     </div>
                                 </div>
 
-                                <Link
-                                    href="/chat"
-                                    className="flex items-center justify-between w-full bg-white/10 hover:bg-white/20 border border-white/30 text-white px-6 py-4 rounded-lg font-semibold transition-all"
-                                >
-                                    <div className="text-left">
-                                        <div className="font-semibold">Continue Without Oura</div>
-                                        <div className="text-sm opacity-90">Access general AI coaching features</div>
-                                    </div>
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </Link>
+                                <div className="relative">
+                                    <Link
+                                        href="/chat"
+                                        className="flex items-center justify-between w-full bg-white/10 hover:bg-white/20 border border-white/30 text-white px-6 py-4 rounded-lg font-semibold transition-all"
+                                    >
+                                        <div className="text-left">
+                                            <div className="font-semibold">Continue Without Oura</div>
+                                            <div className="text-sm opacity-90">Access general AI coaching features</div>
+                                        </div>
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </Link>
+                                    <button
+                                        onClick={() => setShowChatDropdown(!showChatDropdown)}
+                                        className="mt-2 text-sm text-gray-300 hover:text-white transition-colors flex items-center mx-auto"
+                                    >
+                                        More options <ChevronDown className="w-4 h-4 ml-1" />
+                                    </button>
+                                    {showChatDropdown && (
+                                        <div className="absolute left-0 right-0 mt-1 bg-gray-800 rounded shadow-lg border border-gray-700 overflow-hidden z-10">
+                                            <a
+                                                href="https://chat.steno.ai/?id=devin-ai-SxIFG3&mode=fullscreen"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="block w-full text-left px-4 py-3 text-sm hover:bg-gray-700 transition-colors text-gray-300"
+                                            >
+                                                Open Old Chat (Login Required)
+                                            </a>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     )}
