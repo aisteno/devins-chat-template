@@ -7,22 +7,11 @@ import Image from "next/image"
 
 export default function HomePage() {
     const [isOuraConnected, setIsOuraConnected] = useState(false)
-    const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
     useEffect(() => {
         // Check if Oura is already connected
         const ouraToken = document.cookie.includes('oura_access_token')
         setIsOuraConnected(ouraToken)
-
-        // Check if user just connected Oura
-        const urlParams = new URLSearchParams(window.location.search)
-        if (urlParams.get('connected') === 'true') {
-            setShowSuccessMessage(true)
-            // Remove the query parameter from URL
-            window.history.replaceState({}, document.title, window.location.pathname)
-            // Hide success message after 5 seconds
-            setTimeout(() => setShowSuccessMessage(false), 5000)
-        }
     }, [])
 
     return (
