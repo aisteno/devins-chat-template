@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Activity, ChevronDown } from "lucide-react"
+import { Check } from "lucide-react"
+import Image from "next/image"
 
 export default function HomePage() {
     const [isOuraConnected, setIsOuraConnected] = useState(false)
     const [showSuccessMessage, setShowSuccessMessage] = useState(false)
-    const [showChatDropdown, setShowChatDropdown] = useState(false)
 
     useEffect(() => {
         // Check if Oura is already connected
@@ -26,144 +26,119 @@ export default function HomePage() {
     }, [])
 
     return (
-        <main className="min-h-screen bg-gradient-to-br from-purple-900 via-black to-blue-900 flex items-center justify-center p-6">
-            {showSuccessMessage && (
-                <div className="fixed top-0 left-0 right-0 bg-green-500 text-white px-4 py-3 text-center font-medium z-50">
-                    🎉 Successfully connected to Oura! Your health data is now available for AI coaching.
-                </div>
-            )}
-
-            <div className="max-w-2xl w-full">
-                <div className="text-center mb-12">
-                    <div className="flex justify-center mb-6">
-                        <div className="relative">
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-600 rounded-full w-32 h-32 opacity-20 animate-pulse"></div>
-                            <Activity className="w-32 h-32 text-blue-400 relative" />
+        <main className="min-h-screen bg-gradient-to-br from-[#2B9FD9] via-[#1E88C7] to-[#1B7AB8] flex items-center justify-center overflow-hidden">
+            <div className="w-full max-w-7xl mx-auto px-6 lg:px-12 py-12">
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                    {/* Left Content */}
+                    <div className="text-white space-y-8">
+                        {/* Logo */}
+                        <div className="mb-8">
+                            <Image
+                                src="https://res.cloudinary.com/dkxonvvu8/image/upload/v1759842971/logo_envo8w.png"
+                                alt="Sleep Science Academy"
+                                width={180}
+                                height={60}
+                                className="h-auto"
+                            />
                         </div>
-                    </div>
-                    <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
-                        Devin's AI Health Coach
-                    </h1>
-                    <p className="text-xl text-gray-200">
-                        Personalized AI coaching powered by your Oura Ring data
-                    </p>
-                </div>
 
-                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
-                    {isOuraConnected ? (
-                        <div className="text-center">
-                            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500 rounded-full mb-4">
-                                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                </svg>
-                            </div>
-                            <h2 className="text-2xl font-semibold text-white mb-4">
-                                Oura Ring Connected
-                            </h2>
-                            <p className="text-gray-200 mb-8">
-                                Your health data is synced and ready for personalized AI coaching
+                        {/* Main Heading */}
+                        <div>
+                            <h1 className="text-5xl lg:text-6xl font-bold leading-tight mb-6">
+                                Your Sleep
+                                <br />
+                                <span className="text-[#5AB9E8]">Coach AI</span>
+                            </h1>
+                            <p className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-lg">
+                                Transform your sleep with AI-powered sleep coaching from sleep expert Devin Burke. Get personalized sleep plans, evidence-based strategies, and real-time guidance 24/7.
                             </p>
-                            <div className="relative">
-                                <Link
-                                    href="/chat"
-                                    className="block w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105"
-                                >
-                                    Open AI Health Coach
-                                </Link>
-                                <button
-                                    onClick={() => setShowChatDropdown(!showChatDropdown)}
-                                    className="mt-2 text-sm text-gray-300 hover:text-white transition-colors flex items-center mx-auto"
-                                >
-                                    More options <ChevronDown className="w-4 h-4 ml-1" />
-                                </button>
-                                {showChatDropdown && (
-                                    <div className="absolute left-0 right-0 mt-1 bg-gray-800 rounded shadow-lg border border-gray-700 overflow-hidden z-10">
-                                        <a
-                                            href="https://chat.steno.ai/?id=devin-ai-SxIFG3&mode=fullscreen"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="block w-full text-left px-4 py-3 text-sm hover:bg-gray-700 transition-colors text-gray-300"
-                                        >
-                                            Open Old Chat (Login Required)
-                                        </a>
-                                    </div>
-                                )}
-                            </div>
                         </div>
-                    ) : (
-                        <div className="space-y-6">
-                            <div className="text-center">
-                                <h2 className="text-2xl font-semibold text-white mb-2">
-                                    Get Started
-                                </h2>
-                                <p className="text-gray-200">
-                                    Choose how you want to experience AI health coaching
-                                </p>
-                            </div>
 
+                        {/* Rating */}
+                        <div className="flex items-center gap-3">
+                            <div className="flex gap-1">
+                                {[...Array(5)].map((_, i) => (
+                                    <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                                    </svg>
+                                ))}
+                            </div>
+                            <span className="text-white/90 font-medium">4.7/5 from 1500+ users</span>
+                        </div>
+
+                        {/* CTA Button */}
+                        {isOuraConnected ? (
+                            <div className="space-y-6">
+                                <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-400/50 rounded-lg px-4 py-2">
+                                    <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                                        <Check className="w-3 h-3 text-white" />
+                                    </div>
+                                    <span className="text-white font-medium">Oura Ring Connected</span>
+                                </div>
+                                <div>
+                                    <Link
+                                        href={process.env.NEXT_PUBLIC_CHAT_REDIRECT_URL!}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-block bg-white text-[#1E88C7] px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
+                                    >
+                                        Open AI Sleep Coach
+                                    </Link>
+                                </div>
+                            </div>
+                        ) : (
                             <div className="space-y-4">
                                 <Link
                                     href="/auth/oura"
-                                    className="flex items-center justify-between w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-4 rounded-lg font-semibold transition-all transform hover:scale-105"
+                                    className="inline-block bg-white text-[#1E88C7] px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
                                 >
-                                    <div className="text-left">
-                                        <div className="font-semibold">Connect Oura Ring</div>
-                                        <div className="text-sm opacity-90">Get personalized insights from your health data</div>
-                                    </div>
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                    </svg>
+                                    Connect to Oura Ring
                                 </Link>
-
-                                <div className="relative">
-                                    <div className="absolute inset-0 flex items-center">
-                                        <div className="w-full border-t border-white/20"></div>
-                                    </div>
-                                    <div className="relative flex justify-center text-sm">
-                                        <span className="px-4 bg-transparent text-gray-300">OR</span>
-                                    </div>
-                                </div>
-
-                                <div className="relative">
+                                <div className="text-sm">
                                     <Link
-                                        href="/chat"
-                                        className="flex items-center justify-between w-full bg-white/10 hover:bg-white/20 border border-white/30 text-white px-6 py-4 rounded-lg font-semibold transition-all"
+                                        href={process.env.NEXT_PUBLIC_CHAT_REDIRECT_URL!}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-white/80 hover:text-white underline"
                                     >
-                                        <div className="text-left">
-                                            <div className="font-semibold">Continue Without Oura</div>
-                                            <div className="text-sm opacity-90">Access general AI coaching features</div>
-                                        </div>
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                        </svg>
+                                        or continue without Oura Ring
                                     </Link>
-                                    <button
-                                        onClick={() => setShowChatDropdown(!showChatDropdown)}
-                                        className="mt-2 text-sm text-gray-300 hover:text-white transition-colors flex items-center mx-auto"
-                                    >
-                                        More options <ChevronDown className="w-4 h-4 ml-1" />
-                                    </button>
-                                    {showChatDropdown && (
-                                        <div className="absolute left-0 right-0 mt-1 bg-gray-800 rounded shadow-lg border border-gray-700 overflow-hidden z-10">
-                                            <a
-                                                href="https://chat.steno.ai/?id=devin-ai-SxIFG3&mode=fullscreen"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="block w-full text-left px-4 py-3 text-sm hover:bg-gray-700 transition-colors text-gray-300"
-                                            >
-                                                Open Old Chat (Login Required)
-                                            </a>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
-                        </div>
-                    )}
-                </div>
+                        )}
 
-                <p className="text-center text-gray-400 text-sm mt-8">
-                    By connecting your Oura Ring, you agree to share health data for AI coaching purposes
-                </p>
+                        {/* Feature List */}
+                        <div className="space-y-3 pt-4">
+                            <div className="flex items-center gap-3">
+                                <Check className="w-5 h-5 text-white/90" />
+                                <span className="text-white/90">Trusted by sleepers worldwide</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <Check className="w-5 h-5 text-white/90" />
+                                <span className="text-white/90">Evidence-based sleep science</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <Check className="w-5 h-5 text-white/90" />
+                                <span className="text-white/90">Cancel anytime</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Image */}
+                    <div className="relative lg:block hidden">
+                        <div className="relative">
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl transform rotate-3"></div>
+                            <Image
+                                src="https://res.cloudinary.com/dkxonvvu8/image/upload/v1759842972/profile_uk7a2y.jpg"
+                                alt="Devin Burke - Sleep Expert"
+                                width={600}
+                                height={700}
+                                className="relative rounded-3xl shadow-2xl object-cover"
+                                priority
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     )
